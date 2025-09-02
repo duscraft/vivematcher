@@ -4,6 +4,16 @@ on:
   push:
     branches: [main]
 
+env:
+  DOCKER_USER: ${{ github.actor }}
+  PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  REPO_OWNER: ${{ github.repository_owner }}
+  SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+  SSH_IP: ${{ secrets.VPS_SSH_IP }}
+  SSH_USER: ${{ secrets.VPS_SSH_USER }}
+  SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+  SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+
 jobs:
   build:
     name: Build and Deploy (main)
@@ -22,16 +32,12 @@ jobs:
       - name: Make Maven Wrapper executable
         run: chmod +x mvnw
 
-      - name: Build
-        run: ./mvnw -B -ntp clean package
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: target/*.jar
-          if-no-files-found: error
-
-      - name: Deploy (placeholder)
+      - name: Build and uploard docker image
         run: |
-          echo "Deploy step placeholder. Add your deployment commands or actions here."
+          docker build . --tag vivematcher
+          docker login ghcr.io -u $GITHUB_ACTOR -p $PAT_TOKEN
+          docker tag vivematcher ghcr.io/$REPO_OWNER/vivematcher:latest
+          docker push ghcr.io/$REPO_OWNER/vivematcher:latest
+
+      - name: Rollout
+        run: sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_IP -p $SSH_PORT 'sudo kubectl rollout restart deployment vivematcher-app'
