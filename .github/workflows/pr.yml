@@ -1,0 +1,25 @@
+name: Pull Requests
+
+on:
+  pull_request:
+
+jobs:
+  pr-checks:
+    name: Lint, Test, and Build (PR)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '24'
+          cache: maven
+
+      - name: Make Maven Wrapper executable
+        run: chmod +x mvnw
+
+      - name: Lint, Test, and Build
+        run: ./mvnw -B -ntp clean verify
