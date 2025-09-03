@@ -17,6 +17,15 @@ public class User {
     @Column(nullable = false, length = 100)
     private String displayName;
 
+    public User() {
+    }
+
+    public User(String hero, String rank, String displayName) {
+        this.hero = hero;
+        this.rank = rank;
+        this.displayName = displayName;
+    }
+
     public Long getId() {
         return id;
     }

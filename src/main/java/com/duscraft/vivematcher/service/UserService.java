@@ -27,4 +27,8 @@ public class UserService {
     public Optional<User> findByDisplayName(String displayName) {
         return repo.findByDisplayName(displayName);
     }
+
+    public Optional<User> getById(String id) {
+        return repo.findById(Long.valueOf(id));
+    }
 }
