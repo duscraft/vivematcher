@@ -1,4 +1,4 @@
-package com.duscraft.vivematcher.repository;
+package com.duscraft.vivematcher.repository.user;
 
 import com.duscraft.vivematcher.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

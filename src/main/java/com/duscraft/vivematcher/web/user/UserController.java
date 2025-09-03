@@ -1,7 +1,7 @@
 package com.duscraft.vivematcher.web.user;
 
 import com.duscraft.vivematcher.domain.user.User;
-import com.duscraft.vivematcher.service.UserService;
+import com.duscraft.vivematcher.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
