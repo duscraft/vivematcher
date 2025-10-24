@@ -1,5 +1,5 @@
 # ===== Builder stage =====
-FROM maven:3.9.9-eclipse-temurin-24 AS builder
+FROM maven:3.9.9-eclipse-temurin-25 AS builder
 
 WORKDIR /workspace
 
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn -B -ntp clean package -DskipTests
 
 # ===== Runtime stage =====
-FROM eclipse-temurin:24-jre AS runtime
+FROM eclipse-temurin:25-jre AS runtime
 
 WORKDIR /app
 
