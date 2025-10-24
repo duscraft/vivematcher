@@ -18,86 +18,78 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+  @Mock
+  private UserRepository userRepository;
 
-    @InjectMocks
-    private UserService userService;
+  @InjectMocks
+  private UserService userService;
 
-    private User testUser;
-    private final String displayName = "TestPlayer";
-    private final String hero = "Mercy";
-    private final String rank = "Diamond";
+  private User testUser;
+  private final String displayName = "TestPlayer";
+  private final String hero = "Mercy";
+  private final String rank = "Diamond";
 
-    @BeforeEach
-    void setUp() {
-        testUser = new User(hero, rank, displayName);
-        testUser.setId(1L);
-    }
+  @BeforeEach
+  void setUp() {
+    testUser = new User(hero, rank, displayName);
+    testUser.setId(1L);
+  }
 
-    @Test
-    void createUser_shouldSaveAndReturnUser() {
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
+  @Test
+  void createUser_shouldSaveAndReturnUser() {
+    when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        User result = userService.createUser(displayName, hero, rank);
+    User result = userService.createUser(displayName, hero, rank);
 
-        assertNotNull(result);
-        assertEquals(testUser.getId(), result.getId());
-        assertEquals(displayName, result.getDisplayName());
-        assertEquals(hero, result.getHero());
-        assertEquals(rank, result.getRank());
-        verify(userRepository, times(1)).save(any(User.class));
-    }
+    assertNotNull(result);
+    assertEquals(testUser.getId(), result.getId());
+    assertEquals(displayName, result.getDisplayName());
+    assertEquals(hero, result.getHero());
+    assertEquals(rank, result.getRank());
+    verify(userRepository, times(1)).save(any(User.class));
+  }
 
-    @Test
-    void findByDisplayName_whenUserExists_shouldReturnUser() {
-        when(userRepository.findByDisplayName(displayName)).thenReturn(Optional.of(testUser));
+  @Test
+  void findByDisplayName_whenUserExists_shouldReturnUser() {
+    when(userRepository.findByDisplayName(displayName)).thenReturn(Optional.of(testUser));
 
-        Optional<User> result = userService.findByDisplayName(displayName);
+    Optional<User> result = userService.findByDisplayName(displayName);
 
-        assertTrue(result.isPresent());
-        assertEquals(testUser, result.get());
-        verify(userRepository, times(1)).findByDisplayName(displayName);
-    }
+    assertTrue(result.isPresent());
+    assertEquals(testUser, result.get());
+    verify(userRepository, times(1)).findByDisplayName(displayName);
+  }
 
-    @Test
-    void findByDisplayName_whenUserDoesNotExist_shouldReturnEmpty() {
-        when(userRepository.findByDisplayName("NonExistentUser")).thenReturn(Optional.empty());
+  @Test
+  void findByDisplayName_whenUserDoesNotExist_shouldReturnEmpty() {
+    when(userRepository.findByDisplayName("NonExistentUser")).thenReturn(Optional.empty());
 
-        Optional<User> result = userService.findByDisplayName("NonExistentUser");
+    Optional<User> result = userService.findByDisplayName("NonExistentUser");
 
-        assertFalse(result.isPresent());
-        verify(userRepository, times(1)).findByDisplayName("NonExistentUser");
-    }
+    assertFalse(result.isPresent());
+    verify(userRepository, times(1)).findByDisplayName("NonExistentUser");
+  }
 
-    @Test
-    void getById_whenUserExists_shouldReturnUser() {
-        String id = "1";
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+  @Test
+  void getById_whenUserExists_shouldReturnUser() {
+    Long id = 1L;
+    when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
 
-        Optional<User> result = userService.getById(id);
+    Optional<User> result = userService.getById(id);
 
-        assertTrue(result.isPresent());
-        assertEquals(testUser, result.get());
-        verify(userRepository, times(1)).findById(1L);
-    }
+    assertTrue(result.isPresent());
+    assertEquals(testUser, result.get());
+    verify(userRepository, times(1)).findById(1L);
+  }
 
-    @Test
-    void getById_whenUserDoesNotExist_shouldReturnEmpty() {
-        String id = "999";
-        when(userRepository.findById(999L)).thenReturn(Optional.empty());
+  @Test
+  void getById_whenUserDoesNotExist_shouldReturnEmpty() {
+    Long id = 999L;
+    when(userRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Optional<User> result = userService.getById(id);
+    Optional<User> result = userService.getById(id);
 
-        assertFalse(result.isPresent());
-        verify(userRepository, times(1)).findById(999L);
-    }
-
-    @Test
-    void getById_withInvalidId_shouldHandleException() {
-        String invalidId = "abc"; // non-numeric
-
-        assertThrows(NumberFormatException.class, () -> userService.getById(invalidId));
-        verify(userRepository, never()).findById(any());
-    }
+    assertFalse(result.isPresent());
+    verify(userRepository, times(1)).findById(999L);
+  }
 }

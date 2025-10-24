@@ -18,58 +18,58 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
-    @Mock
-    private UserService userService;
+  @Mock
+  private UserService userService;
 
-    @InjectMocks
-    private UserController userController;
+  @InjectMocks
+  private UserController userController;
 
-    private User testUser;
-    private final String displayName = "TestPlayer";
-    private final String hero = "Mercy";
-    private final String rank = "Diamond";
-    private final Long userId = 1L;
+  private User testUser;
+  private final String displayName = "TestPlayer";
+  private final String hero = "Mercy";
+  private final String rank = "Diamond";
+  private final Long userId = 1L;
 
-    @BeforeEach
-    void setUp() {
-        testUser = new User(hero, rank, displayName);
-        testUser.setId(userId);
-    }
+  @BeforeEach
+  void setUp() {
+    testUser = new User(hero, rank, displayName);
+    testUser.setId(userId);
+  }
 
-    @Test
-    void createUser_shouldReturnCreatedUser() {
-        CreateUserRequest request = new CreateUserRequest();
-        request.setDisplayName(displayName);
-        request.setHero(hero);
-        request.setRank(rank);
-        when(userService.createUser(displayName, hero, rank)).thenReturn(testUser);
-        
-        User result = userController.createUser(request);
-        
-        assertNotNull(result);
-        assertEquals(testUser.getId(), result.getId());
-        assertEquals(displayName, result.getDisplayName());
-        verify(userService, times(1)).createUser(displayName, hero, rank);
-    }
+  @Test
+  void createUser_shouldReturnCreatedUser() {
+    CreateUserRequest request = new CreateUserRequest();
+    request.setDisplayName(displayName);
+    request.setHero(hero);
+    request.setRank(rank);
+    when(userService.createUser(displayName, hero, rank)).thenReturn(testUser);
 
-    @Test
-    void getUser_whenUserExists_shouldReturnUser() {
-        String id = userId.toString();
-        when(userService.getById(id)).thenReturn(Optional.of(testUser));
-        
-        User result = userController.getUser(id);
-        
-        assertNotNull(result);
-        assertEquals(testUser.getId(), result.getId());
-        verify(userService, times(1)).getById(id);
-    }
-    
-    @Test
-    void getUser_whenUserDoesNotExist_shouldThrowException() {
-        String id = "999";
-        when(userService.getById(id)).thenReturn(Optional.empty());
-        
-        assertThrows(NoSuchElementException.class, () -> userController.getUser(id));
-        verify(userService, times(1)).getById(id);
-    }
+    User result = userController.createUser(request);
+
+    assertNotNull(result);
+    assertEquals(testUser.getId(), result.getId());
+    assertEquals(displayName, result.getDisplayName());
+    verify(userService, times(1)).createUser(displayName, hero, rank);
+  }
+
+  @Test
+  void getUser_whenUserExists_shouldReturnUser() {
+    Long id = userId;
+    when(userService.getById(id)).thenReturn(Optional.of(testUser));
+
+    User result = userController.getUser(id);
+
+    assertNotNull(result);
+    assertEquals(testUser.getId(), result.getId());
+    verify(userService, times(1)).getById(id);
+  }
+
+  @Test
+  void getUser_whenUserDoesNotExist_shouldThrowException() {
+    Long id = 999L;
+    when(userService.getById(id)).thenReturn(Optional.empty());
+
+    assertThrows(NoSuchElementException.class, () -> userController.getUser(id));
+    verify(userService, times(1)).getById(id);
+  }
 }

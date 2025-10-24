@@ -9,26 +9,27 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository repo;
+  private final UserRepository repo;
 
-    public UserService(UserRepository repo) {
-        this.repo = repo;
-    }
+  public UserService(UserRepository repo) {
+    this.repo = repo;
+  }
 
-    @Transactional
-    public User createUser(String displayName, String hero, String rank) {
-        User u = new User();
-        u.setDisplayName(displayName);
-        u.setHero(hero);
-        u.setRank(rank);
-        return repo.save(u);
-    }
+  @Transactional
+  public User createUser(String displayName, String hero, String rank) {
+    User u = new User();
+    u.setDisplayName(displayName);
+    u.setHero(hero);
+    u.setRank(rank);
+    return repo.save(u);
+  }
 
-    public Optional<User> findByDisplayName(String displayName) {
-        return repo.findByDisplayName(displayName);
-    }
+  public Optional<User> findByDisplayName(String displayName) {
+    return repo.findByDisplayName(displayName);
+  }
 
-    public Optional<User> getById(String id) {
-        return repo.findById(Long.valueOf(id));
-    }
+  @Transactional(readOnly = true)
+  public Optional<User> getById(Long id) {
+    return repo.findById(Long.valueOf(id));
+  }
 }

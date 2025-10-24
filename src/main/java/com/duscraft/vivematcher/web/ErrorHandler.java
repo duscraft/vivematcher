@@ -10,9 +10,9 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleNoSuchElementException(NoSuchElementException e) {
-        return new ApiError("Not Found", e.getMessage() != null ? e.getMessage() : "The requested resource was not found");
-    }
+  @ExceptionHandler(NoSuchElementException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ApiError handleNoSuchElementException(NoSuchElementException e) {
+    return new ApiError("Not Found", e.getMessage() != null ? e.getMessage() : "The requested resource was not found");
+  }
 }
