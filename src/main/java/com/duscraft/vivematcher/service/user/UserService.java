@@ -30,6 +30,6 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public Optional<User> getById(Long id) {
-    return repo.findById(Long.valueOf(id));
+    return repo.findById(id);
   }
 }
