@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -69,7 +70,7 @@ class UserControllerTest {
     Long id = 999L;
     when(userService.getById(id)).thenReturn(Optional.empty());
 
-    assertThrows(NoSuchElementException.class, () -> userController.getUser(id));
+    assertThrows(ResponseStatusException.class, () -> userController.getUser(id));
     verify(userService, times(1)).getById(id);
   }
 }

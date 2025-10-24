@@ -47,7 +47,7 @@ class UserApiIntegrationTest {
     MvcResult result = mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").isNumber())
         .andExpect(jsonPath("$.displayName").value("ApiTestUser"))
         .andExpect(jsonPath("$.hero").value("Winston"))
